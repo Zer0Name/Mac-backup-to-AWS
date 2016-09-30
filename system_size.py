@@ -8,7 +8,6 @@ with open('systemlog', 'r') as file:
             filename = line.rstrip('\n')
         except:
             print "error"
-                
         try:
             byte += float(os.stat(filename).st_size) # size is in bytes
             print filename
