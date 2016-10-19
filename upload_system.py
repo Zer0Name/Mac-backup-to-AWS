@@ -8,6 +8,10 @@ from multiprocessing.pool import ThreadPool as Pool
 
 aws_access_key_id = ""
 aws_secret_access_key = ""
+worker = 15 #amount of simulatumallys threads uploading 
+
+bucket = raw_input("Enter bucket name: ")
+folder = raw_input("Folder name you wish to upload system too: ")
 
 def mapping():
     folder = os.walk(os.getcwd())
@@ -25,7 +29,6 @@ def mapping():
     
 def upload_seqence(worker,folder,bucket):
         
-             
     pool_size = int(worker) # "parallelness"
     pool = Pool(pool_size)
 
@@ -52,7 +55,7 @@ def upload_seqence(worker,folder,bucket):
 # number = display current file number being uploaded
 # bucket = aws bucket you with to uplaod too
 
-def upload_file(file_path, folder,number, bucket): 
+def upload_file(file_path, folder, number, bucket): 
 
     # connect to  amazon 
     conn = boto.connect_s3(aws_access_key_id , aws_secret_access_key ) 
