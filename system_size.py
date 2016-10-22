@@ -1,6 +1,7 @@
 import os 
 
 byte = 0
+files = 0
 
 def mapping():
     folder = os.walk(os.getcwd())
@@ -26,10 +27,12 @@ with open('systemlog', 'r') as file:
             print "error"
         try:
             byte += float(os.stat(filename).st_size) # size is in bytes
+            files = files + 1
             print filename
             print os.stat(filename).st_size
         except:
             print "could not get file size"
             
 
-print "File system in bytes: " +   str(byte/1024) + " Megabyte"
+print "File system in bytes: " +   str(byte/1000/1000) + " Gigabytes"
+print "numbers of files to upload is: " + str(files)
