@@ -16,7 +16,7 @@ class server:
     # security_groups the security_groups for the server 
     # user_data the code that will run when the server starts up 
     
-    def __init__(self, aws_access_key_id, aws_secret_access_key,size , name,key_name, instance_type, security_groups, user_data  ):
+    def Server_Start_up(self, aws_access_key_id, aws_secret_access_key,size , name,key_name, instance_type, security_groups, user_data  ):
         
         #creates the external storage 
         dev_sda1 = boto.ec2.blockdevicemapping.EBSBlockDeviceType(delete_on_termination=True)
@@ -24,7 +24,7 @@ class server:
         bdm = boto.ec2.blockdevicemapping.BlockDeviceMapping()
         bdm['/dev/sda1'] = dev_sda1 
         
-        #connectts the aws 
+        #connects the aws 
         conn = ec2.connection.EC2Connection(aws_access_key_id, aws_secret_access_key)
         
         #starts server
@@ -32,7 +32,7 @@ class server:
         
         print "lunching instance"
         
-        
+        return reservation.instances[0]
         # instance = reservation.instances[0]
         # while instance.state != 'running':
         #     print '...instance is %s' % instance.state

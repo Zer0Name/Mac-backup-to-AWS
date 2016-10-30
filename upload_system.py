@@ -1,19 +1,33 @@
 import os
-import boto
+import pip
+
+def imports_installs(): # install required imports 
+    os.system("sudo apt-get -y install python-pip")
+    try:
+        os.system("sudo pip install boto")
+        os.system("sudo pip install FileChunkIO")
+    except Exception as e:     # most generic exception you can catch
+        print e
+        exit()
+        
+imports_installs() #install all required imports for the program
+
+import boto #pip install boto
 import math
 from filechunkio import FileChunkIO   #  pip install FileChunkIO
 from multiprocessing.pool import ThreadPool as Pool
 
 
 
-aws_access_key_id = ""
-aws_secret_access_key = ""
-worker = 15 #amount of simulatumallys threads uploading 
+aws_access_key_id = ""  # access key 
+aws_secret_access_key = "" # secret key
+worker = 15  #amount of simulatumallys threads uploading 
+files = 0
 
-bucket = raw_input("Enter bucket name: ")
-folder = raw_input("Folder name you wish to upload system too: ")
 
-def mapping():
+
+# maps the entire computer
+def mapping(files):
     folder = os.walk(os.getcwd())
     lenth = len(os.getcwd())
     f = open('systemlog', 'w')
@@ -26,8 +40,13 @@ def mapping():
             f.write( y +"\n")
     f.close()
     
-    
-def upload_seqence(worker,folder,bucket):
+    with open('systemlog', 'r') as file:
+        for i, line in enumerate(file):
+            files = files + 1
+    return files
+
+
+def upload_seqence(worker,folder,bucket,files):
         
     pool_size = int(worker) # "parallelness"
     pool = Pool(pool_size)
@@ -39,13 +58,11 @@ def upload_seqence(worker,folder,bucket):
                 filename = line.rstrip('\n')
             except:
                 print "error"
-            if filename == "main_program.py" or filename == "systemlog":
-                print "not uploading"
-            else: 
-                try:
-                    pool.apply_async(upload_file, (filename, folder, i , bucket))
-                except:
-                    print "error"
+            try:
+                pool.apply_async(upload_file, (filename, folder, i , bucket, files))
+            except:
+                print "error"
+                
     file.close() 
     pool.close() 
     pool.join()
@@ -55,7 +72,7 @@ def upload_seqence(worker,folder,bucket):
 # number = display current file number being uploaded
 # bucket = aws bucket you with to uplaod too
 
-def upload_file(file_path, folder, number, bucket): 
+def upload_file(file_path, folder, number, bucket, files): 
 
     # connect to  amazon 
     conn = boto.connect_s3(aws_access_key_id , aws_secret_access_key ) 
@@ -88,10 +105,19 @@ def upload_file(file_path, folder, number, bucket):
 
     if len(mp.get_all_parts()) == chunk_count:
         mp.complete_upload()
-        print number
-        print "upload_file done"
+        print str(number) + " out of:" + str(files)
     else:
         mp.cancel_upload()
         print "upload_file failed"
     
 
+def run(worker, files, bucket, folder):
+    imports_installs() # install required files
+    files = mapping(files) # maps the computers 
+    files = files - 1
+    upload_seqence(worker,folder,bucket,files) # starts to the uplaod sequence
+    
+if __name__ == "__main__":
+    bucket = raw_input("Enter bucket name: ")
+    folder = raw_input("Folder name you wish to upload system too: ")
+    run(worker, files, bucket, folder)

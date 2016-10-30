@@ -16,6 +16,7 @@ def mapping():
             f.write( y +"\n")
     f.close()
     
+    
 mapping()
     
     
@@ -28,11 +29,9 @@ with open('systemlog', 'r') as file:
         try:
             byte += float(os.stat(filename).st_size) # size is in bytes
             files = files + 1
-            print filename
-            print os.stat(filename).st_size
         except:
             print "could not get file size"
             
-
+            
 print "File system in bytes: " +   str(byte/1000/1000) + " Gigabytes"
 print "numbers of files to upload is: " + str(files)
