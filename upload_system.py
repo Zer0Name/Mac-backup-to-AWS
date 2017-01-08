@@ -109,6 +109,9 @@ def upload_file(file_path, folder, number, bucket, files):
     else:
         mp.cancel_upload()
         print "upload_file failed"
+        
+        print "trying upload again"
+        upload_file(file_path, folder, number, bucket, files)
     
 
 def run(worker, files, bucket, folder):

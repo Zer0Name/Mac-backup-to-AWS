@@ -26,7 +26,7 @@ from multiprocessing.pool import ThreadPool as Pool
 from filechunkio import FileChunkIO
 from django.utils.encoding import smart_str, smart_unicode
 
-LOCAL_PATH = 'tmp/' #file in the server which   to download too 
+LOCAL_PATH = 'tmp/' #file in the server which the program will download too.
 
 aws_access_key_id = " """+aws_access_key_id+""" "                                   """  #get rid of this
 aws_access_key_id = aws_access_key_id.strip()
