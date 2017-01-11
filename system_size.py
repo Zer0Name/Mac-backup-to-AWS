@@ -28,10 +28,11 @@ with open('systemlog', 'r') as file:
             print "error"
         try:
             byte += float(os.stat(filename).st_size) # size is in bytes
-            files = files + 1
+            
         except:
             print "could not get file size"
-            
+        
+        files = files + 1   
             
 print "File system in bytes: " +   str(byte/1000/1000) + " Gigabytes"
 print "numbers of files to upload is: " + str(files)
